@@ -1,71 +1,69 @@
-<?php
-// controller.php
+<?php include 'monnayeur.php'; ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Temple du Jeu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container pt-4 pb-4">
+        <h1 class="text-center pt-4">Calcul de rendu monnaie</h1>
+        <form action="#" method="POST">
+            <div class="mb-3">
+                <label class="form-label" for="montantDu">Prix du jeu :</label>
+                <input class="form-control" type="number" id="montantDu" name="montantDu" step="0.01" min="0" required
+                    value="<?php echo isset($_POST['montantDu']) ? htmlspecialchars($_POST['montantDu']) : ''; ?>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="montantDonne">Montant reçu :</label>
+                <input class="form-control" type="number" id="montantDonne" name="montantDonne" step="0.01" min="0" required
+                    value="<?php echo isset($_POST['montantDonne']) ? htmlspecialchars($_POST['montantDonne']) : ''; ?>">
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Calculer</button>
+            </div>
+        </form>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Pièce/Billet (en €)</th>
+                    <th>Nb</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <?php if ($erreur): ?>
+                    <tr>
+                        <td colspan="2" class="text-center"><?php echo $erreur; ?></td>
+                    </tr>
+                <?php elseif ($montantEgal): ?>
+                    <tr>
+                        <td colspan="2" class="text-center"><?php echo $montantEgal; ?></td>
+                    </tr>  
+                <?php else: ?> 
+                    <?php foreach($renduMonnaie as $monnaie => $nombreDeMonnaieUtilise): ?>
+                        <tr>
+                            <td>
+                                <?php echo toEuros($monnaie); ?>
+                            </td>
+                            <td>
+                                <?php echo $nombreDeMonnaieUtilise; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
 
-const VALEURS = [50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100, 50, 20, 10, 5, 2, 1];
-
-$renduMonnaie = [];
-$erreur = '';
-$montantEgal = '';
-
-if (isset($_POST['montantDu']) && isset($_POST['montantDonne'])) {
-        $montantDu = (float)$_POST['montantDu'];
-        $montantDonne = (float)$_POST['montantDonne'];
-
-        
-        // Message d'erreur si le montant donné est inférieur au montant dû
-        if ($montantDonne < $montantDu) {
-            $erreur = 'Le montant donné ne peut pas être inférieur au montant dû.';
-        }
-        
-        // Vérif si montant donné = montant dû
-        if ($montantDonne == $montantDu) {
-            $montantEgal = 'Le montant donné est juste, rien à rendre.';
-        } else {
-            $renduMonnaie = calculRendu($montantDu, $montantDonne);
-        }
-}
-
-// Switch de float a int a cause de la précision
-function toCentimes(float $argentEnEuro) : int {
-    return (int) ($argentEnEuro * 100);
-}
-
-function toEuros(int $argentEnCentimes) : float {
-    return round($argentEnCentimes / 100, 2);
-}
-
-function calculRendu(float $prix, float $monnaieDonnee): array {
-
-    // Initialisation de l'index pour le tableau de monnaies
-    $index = 0;
-
-    // Calcule du montant à rendre
-    $montantARendre = toCentimes($monnaieDonnee) - toCentimes($prix);
-    
-    // Tableau de la monnaie a rendre
-    $rendu = [];
-    
-    while ($montantARendre > 0) {
-    
-        $monnaie = VALEURS[$index];
-    
-        if ($montantARendre >= $monnaie) {
-    
-            $montantARendre -= $monnaie;
-    
-            if (false === isset($rendu[$monnaie]) ) {
-                $rendu[$monnaie] = 1;
-            } else {
-                $rendu[$monnaie]++;
-            }
-            // Permet de faire une deuxième passage si la monnaie est sortie une fois
-            continue;
-        }
-        $index ++;
-    }
-    return $rendu;
-}
-
-// Inclure la vue et passer les données
-include 'view.php';
-?>
+            <tfoot>
+                <?php if (isset($_POST['montantDu']) && isset($_POST['montantDonne'])): ?>
+                    <tr>
+                        <th>Total : <?php echo $montantDonne - $montantDu ."€"; ?></th>
+                    </tr>
+                <?php endif; ?>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>

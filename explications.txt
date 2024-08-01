@@ -14,3 +14,9 @@ Correctifs => 	- Passage de la méthode GET à POST dans le formulaire donc plus
 		- Impossible de rentrer des données négatives.
 		- Création d'un bloc pour faciliter la lecture du montant total à rendre.
 		- Passage sur deux fichiers, un index.php qui va contenir toutes les méthodes et fonction et un view.php qui contiendra toute mon interface.
+
+
+
+
+Amélioration dans le temps :	- Faire des classes.
+				- Gestion de fond de caisse et stock de monnaie.
