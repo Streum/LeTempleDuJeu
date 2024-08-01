@@ -1,0 +1,16 @@
+Pour la Version 1 :
+
+Ayant travaillé en tant que Barman, il m'était inconcevable qu'un client vienne sans argent. De ce fait, je n'avais pas pris en compte ce détail dans mon programme.
+
+Je ne gardais pas les montants dans le formulaire car je les gardais dans l'URL avec la méthode GET, même si, après réflexion ce n'était pas une bonne idée.
+
+C'est pourquoi je n'ai fait qu'un seul fichier n'ayant pas encore eu les cours de PHP.
+
+
+
+Pour la Version 2 :
+
+Correctifs => 	- Passage de la méthode GET à POST dans le formulaire donc plus de donnée dans l'URL.
+		- Impossible de rentrer des données négatives.
+		- Création d'un bloc pour faciliter la lecture du montant total à rendre.
+		- Passage sur deux fichiers, un index.php qui va contenir toutes les méthodes et fonction et un view.php qui contiendra toute mon interface.
